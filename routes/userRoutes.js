@@ -38,9 +38,10 @@ router.get('/me', auth, getMe);
 router.get('/protected', auth, (req, res) => {
   res.json({ message: "Accès autorisé", user: req.user });
 });
-router.get('/users', getAllUsers);
-router.get('/users/:id', getUserById);
-router.patch('/users/:id', updateUserById);
-router.head('/users/:id', headUserById);
+router.get('/users', auth, getAllUsers);
+router.get('/users/:id', auth, getUserById);
+router.patch('/users/:id', auth, updateUserById);
+router.head('/users/:id', auth, headUserById);
+
 
 module.exports = router;
