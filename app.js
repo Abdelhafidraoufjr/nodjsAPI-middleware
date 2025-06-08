@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
-const userRoutea = require('./routes/userRoutes');
+const userRoutes = require('./routes/userRoutes');
 const swaggerSetup = require('./swagger/swagger');
 
 dotenv.config();
@@ -14,5 +14,5 @@ app.use('/api', userRoutes);
 swaggerSetup(app);
 
 app.listen(process.env.PORT, () =>{
-    consol.log('Serveur sur http://localhost:${process.env.PORT}'); 
+    console.log('Server Connected !!'); 
 });

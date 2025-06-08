@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, getMe } = require('../controllers/userController');
+const { register, login, getMe, getAllUsers, getUserById, updateUserById, headUserById } = require('../controllers/userController');
 const auth = require('../middlewares/authMiddleware');
 
 /**
@@ -35,5 +35,12 @@ const auth = require('../middlewares/authMiddleware');
 router.post('/register', register);
 router.post('/login', login);
 router.get('/me', auth, getMe);
+router.get('/protected', auth, (req, res) => {
+  res.json({ message: "Accès autorisé", user: req.user });
+});
+router.get('/users', getAllUsers);
+router.get('/users/:id', getUserById);
+router.patch('/users/:id', updateUserById);
+router.head('/users/:id', headUserById);
 
 module.exports = router;
