@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  title: API Utilisateur
+  title: API Utilisateur et Blog
   version: 1.0.0
-  description: API REST pour gérer l'enregistrement, l'authentification et l'accès aux informations utilisateur.
+  description: API REST pour gérer l'enregistrement, l'authentification, les utilisateurs et les blogs.
 
 servers:
   - url: http://localhost:3000
@@ -229,10 +229,145 @@ paths:
         '404':
           description: Utilisateur non trouvé
 
+  /api/blogs:
+    post:
+      tags:
+        - Blogs
+      summary: Créer un nouveau blog
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - content
+                - imageUrl
+              properties:
+                title:
+                  type: string
+                  example: Mon premier blog
+                description:
+                  type: string
+                  example: "Un résumé rapide de l'article" 
+                content:
+                  type: string
+                  example: Voici le contenu de mon premier blog...
+                imageUrl:
+                  type: string
+                  example: https://example.com/image.jpg
+      responses:
+        '201':
+          description: Blog créé avec succès
+        '400':
+          description: Erreur lors de la création
+
+    get:
+      tags:
+        - Blogs
+      summary: Obtenir tous les blogs
+      responses:
+        '200':
+          description: Liste des blogs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    title:
+                      type: string
+                    content:
+                      type: string
+                    description:
+                      type: string  
+                    imageUrl:
+                      type: string
+                    author:
+                      type: string
+                    createdAt:
+                      type: string
+                      format: date-time
+
+  /api/blogs/{id}:
+    get:
+      tags:
+        - Blogs
+      summary: Obtenir un blog par ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Détails du blog
+        '404':
+          description: Blog non trouvé
+
+    patch:
+      tags:
+        - Blogs
+      summary: Modifier un blog (propriétaire uniquement)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                imageUrl:
+                  type: string
+      responses:
+        '200':
+          description: Blog mis à jour
+        '403':
+          description: Accès refusé
+        '404':
+          description: Blog non trouvé
+
+    delete:
+      tags:
+        - Blogs
+      summary: Supprimer un blog (propriétaire uniquement)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Blog supprimé
+        '403':
+          description: Accès refusé
+        '404':
+          description: Blog non trouvé
+
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
